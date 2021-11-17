@@ -1,9 +1,11 @@
 
-const arena = document.querySelector('.arena1');
+const arena = document.querySelector('.arenas');
+const randomBtn = document.querySelector('.button');
 
 const playerFirst = {
     name: 'Scorpion',
-    hp: 80,
+    player: 1,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['hand', 'leg','head'],
     attack: function () {
@@ -14,7 +16,8 @@ const playerFirst = {
 
 const playerSecond = {
     name: 'Kitana',
-    hp: 80,
+    player: 2,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['hand', 'leg','head'],
     attack: function () {
@@ -22,11 +25,21 @@ const playerSecond = {
     }
 }
 
+function createElement(tag, className) {
+    const $tag = document.createElement(tag);
+
+    if(className) {
+        $tag.classList.add(className);
+    }
+
+    return $tag;
+}
 
 
-function createPlayer(playerClass = 'player', obj) {
+
+function createPlayer(obj) {
     let elem = document.createElement('div');
-    elem.classList.add(playerClass);
+    elem.classList.add('player' + obj.player);
     elem.innerHTML = `
         <div class="progressbar">
             <div class="life" style="width: 100%;"></div>
@@ -37,8 +50,41 @@ function createPlayer(playerClass = 'player', obj) {
         </div>
     `;
 
-    return arena.appendChild(elem);
+    return elem;
 }
 
-createPlayer('player1', playerFirst);
-createPlayer('player2', playerSecond);
+function changeHP(player) {
+    const playerLife = document.querySelector('.player' + player.player + ' .life');
+    player.hp -= randomNum();
+    playerLife.style.width = player.hp + '%';
+
+    if(player.hp < 0) {
+        arena.appendChild(playerLose(player.name));
+        randomBtn.disabled = true;
+    }
+}
+
+function playerLose(name) {
+    const loseTitle = createElement('div', 'loseTitle');
+
+    loseTitle.innerText = name + ' lose';
+
+    return loseTitle;
+}
+
+function randomNum() {
+    let randomNumber = Math.floor(Math.random() * 20);
+    return randomNumber;
+}
+
+randomBtn.addEventListener('click', function () {
+    changeHP(playerFirst);
+    changeHP(playerSecond);
+
+});
+
+arena.appendChild(createPlayer(playerFirst));
+arena.appendChild(createPlayer(playerSecond));
+
+
+
