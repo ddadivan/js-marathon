@@ -1,5 +1,6 @@
 
 const arena = document.querySelector('.arenas');
+const controlArena = arena.querySelector('.control');
 const randomBtn = document.querySelector('.button');
 
 const playerFirst = {
@@ -56,30 +57,70 @@ function createPlayer(obj) {
 function changeHP(player) {
     const playerLife = document.querySelector('.player' + player.player + ' .life');
     player.hp -= randomNum();
-    playerLife.style.width = player.hp + '%';
 
-    if(player.hp < 0) {
-        arena.appendChild(playerLose(player.name));
-        randomBtn.disabled = true;
+
+    if(player.hp <= 0) {
+       player.hp = 0;
     }
+
+    playerLife.style.width = player.hp + '%';
 }
 
-function playerLose(name) {
+function playerWins(name) {
     const loseTitle = createElement('div', 'loseTitle');
 
-    loseTitle.innerText = name + ' lose';
+    if(name) {
+        loseTitle.innerText = name + ' wins';
+    } else {
+        loseTitle.innerText = 'Draw';
+    }
+
+
 
     return loseTitle;
 }
 
 function randomNum() {
-    let randomNumber = Math.floor(Math.random() * 20);
+    let randomNumber = Math.floor(Math.random() * 10);
     return randomNumber;
+}
+
+function createReloadButton() {
+    const wrapReloadBtn = document.createElement('div');
+    wrapReloadBtn.classList.add('reloadWrap');
+    const reloadBtn = document.createElement('button');
+    reloadBtn.classList.add('button');
+    reloadBtn.textContent = 'Restart';
+    wrapReloadBtn.append(reloadBtn);
+    controlArena.append(wrapReloadBtn);
+
+    reloadBtn.addEventListener('click', function(e) {
+        window.location.reload();
+    });
+
 }
 
 randomBtn.addEventListener('click', function () {
     changeHP(playerFirst);
     changeHP(playerSecond);
+
+    if(playerFirst.hp === 0 || playerSecond === 0) {
+        randomBtn.disabled = true;
+    }
+
+    if(playerFirst.hp === 0 && playerFirst.hp < playerSecond.hp) {
+        arena.append(playerWins(playerSecond.name));
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    } else if(playerSecond.hp === 0 && playerSecond.hp < playerFirst.hp) {
+        arena.append(playerWins(playerFirst.name));
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    } else if (playerFirst.hp === 0 && playerSecond.hp === 0) {
+        arena.append(playerWins());
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    }
 
 });
 
