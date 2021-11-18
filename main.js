@@ -2,6 +2,7 @@
 const arena = document.querySelector('.arenas');
 const controlArena = arena.querySelector('.control');
 const randomBtn = document.querySelector('.button');
+const form = document.querySelector('form.control');
 
 const playerFirst = {
     name: 'Scorpion',
@@ -9,9 +10,10 @@ const playerFirst = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['hand', 'leg','head'],
-    attack: function () {
-        console.log(`${this.name} fight`);
-    }
+    elHp,
+    changeHP,
+    renderHp,
+    attack
 }
 
 
@@ -21,10 +23,18 @@ const playerSecond = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['hand', 'leg','head'],
-    attack: function () {
-        console.log(`${this.name} fight`);
-    }
+    elHp,
+    changeHP,
+    renderHp,
+    attack
 }
+
+const HIT = {
+    head: 30,
+    body: 25,
+    foot: 20,
+}
+const ATTACK = ['head', 'body', 'foot'];
 
 function createElement(tag, className) {
     const $tag = document.createElement(tag);
@@ -34,6 +44,26 @@ function createElement(tag, className) {
     }
 
     return $tag;
+}
+
+function attack() {
+    console.log(this.name + ' ' + 'Fight');
+}
+
+function elHp() {
+    return document.querySelector('.player'+this.player+' .life');
+}
+
+function changeHP(randomNumber) {
+    this.hp -= randomNumber;
+
+    if(this.hp <= 0) {
+        this.hp = 0;
+    }
+}
+
+function renderHp() {
+    this.elHp().style.width = this.hp + '%';
 }
 
 
@@ -54,17 +84,17 @@ function createPlayer(obj) {
     return elem;
 }
 
-function changeHP(player) {
-    const playerLife = document.querySelector('.player' + player.player + ' .life');
-    player.hp -= randomNum();
-
-
-    if(player.hp <= 0) {
-       player.hp = 0;
-    }
-
-    playerLife.style.width = player.hp + '%';
-}
+// function changeHP(player) {
+//     const playerLife = document.querySelector('.player' + player.player + ' .life');
+//     player.hp -= randomNum();
+//
+//
+//     if(player.hp <= 0) {
+//        player.hp = 0;
+//     }
+//
+//     playerLife.style.width = player.hp + '%';
+// }
 
 function playerWins(name) {
     const loseTitle = createElement('div', 'loseTitle');
@@ -85,6 +115,10 @@ function randomNum() {
     return randomNumber;
 }
 
+function getRandom(num) {
+    return Math.ceil(Math.random() * num);
+}
+
 function createReloadButton() {
     const wrapReloadBtn = document.createElement('div');
     wrapReloadBtn.classList.add('reloadWrap');
@@ -98,6 +132,17 @@ function createReloadButton() {
         window.location.reload();
     });
 
+}
+
+function enemyAttack() {
+    const hit = ATTACK[getRandom(3) - 1];
+    const defence = ATTACK[getRandom(3) - 1];
+
+    return {
+        value: getRandom(HIT[hit]),
+        hit,
+        defence
+    }
 }
 
 randomBtn.addEventListener('click', function () {
@@ -120,6 +165,28 @@ randomBtn.addEventListener('click', function () {
         arena.append(playerWins());
         randomBtn.style = 'display: none;'
         createReloadButton();
+    }
+
+});
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const enemy = enemyAttack();
+
+    const attack = {};
+
+    for(let item of form) {
+        if(item.checked && item.name === 'hit') {
+            attack.value = getRandom(HIT[item.value]);
+            attack.hit = item.value;
+        }
+
+        if(item.checked && item.name === 'defence') {
+            attack.defence = item.value;
+        }
+
+        item.checked = false;
     }
 
 });
