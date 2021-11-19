@@ -11,7 +11,9 @@ const playerFirst = {
     weapon: ['hand', 'leg','head'],
     attack: function () {
         console.log(`${this.name} fight`);
-    }
+    },
+    elHp,
+    renderHp
 }
 
 
@@ -23,7 +25,9 @@ const playerSecond = {
     weapon: ['hand', 'leg','head'],
     attack: function () {
         console.log(`${this.name} fight`);
-    }
+    },
+    elHp,
+    renderHp
 }
 
 function createElement(tag, className) {
@@ -126,11 +130,8 @@ randomBtn.addEventListener('click', function () {
     changeHP.call(playerFirst, getRandom(20));
     changeHP.call(playerSecond, getRandom(20));
 
-    elHp.call(playerFirst);
-    elHp.call(playerSecond);
-
-    renderHp.call(playerFirst);
-    renderHp.call(playerSecond);
+    playerFirst.renderHp();
+    playerSecond.renderHp();
 
 
 
