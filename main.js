@@ -1,5 +1,6 @@
 
 const arena = document.querySelector('.arenas');
+const controlArena = arena.querySelector('.control');
 const randomBtn = document.querySelector('.button');
 
 const playerFirst = {
@@ -10,7 +11,9 @@ const playerFirst = {
     weapon: ['hand', 'leg','head'],
     attack: function () {
         console.log(`${this.name} fight`);
-    }
+    },
+    elHp,
+    renderHp
 }
 
 
@@ -22,7 +25,9 @@ const playerSecond = {
     weapon: ['hand', 'leg','head'],
     attack: function () {
         console.log(`${this.name} fight`);
-    }
+    },
+    elHp,
+    renderHp
 }
 
 function createElement(tag, className) {
@@ -53,33 +58,100 @@ function createPlayer(obj) {
     return elem;
 }
 
-function changeHP(player) {
-    const playerLife = document.querySelector('.player' + player.player + ' .life');
-    player.hp -= randomNum();
-    playerLife.style.width = player.hp + '%';
+// function changeHP(player) {
+//     const playerLife = document.querySelector('.player' + player.player + ' .life');
+//     player.hp -= randomNum();
+//
+//
+//     if(player.hp <= 0) {
+//        player.hp = 0;
+//     }
+//
+//     playerLife.style.width = player.hp + '%';
+// }
 
-    if(player.hp < 0) {
-        arena.appendChild(playerLose(player.name));
-        randomBtn.disabled = true;
+function elHp() {
+    return document.querySelector('.player'+this.player+' .life');
+}
+
+function changeHP(randomNumber) {
+    this.hp -= randomNumber;
+
+    if(this.hp <= 0) {
+        this.hp = 0;
     }
 }
 
-function playerLose(name) {
+function renderHp() {
+    this.elHp().style.width = this.hp + '%';
+}
+
+function getRandom(num) {
+    return Math.ceil(Math.random() * num);
+}
+
+
+function playerWins(name) {
     const loseTitle = createElement('div', 'loseTitle');
 
-    loseTitle.innerText = name + ' lose';
+    if(name) {
+        loseTitle.innerText = name + ' wins';
+    } else {
+        loseTitle.innerText = 'Draw';
+    }
 
     return loseTitle;
 }
 
 function randomNum() {
-    let randomNumber = Math.floor(Math.random() * 20);
+    let randomNumber = Math.floor(Math.random() * 10);
     return randomNumber;
 }
 
+function createReloadButton() {
+    const wrapReloadBtn = document.createElement('div');
+    wrapReloadBtn.classList.add('reloadWrap');
+    const reloadBtn = document.createElement('button');
+    reloadBtn.classList.add('button');
+    reloadBtn.textContent = 'Restart';
+    wrapReloadBtn.append(reloadBtn);
+    controlArena.append(wrapReloadBtn);
+
+    reloadBtn.addEventListener('click', function(e) {
+        window.location.reload();
+    });
+
+}
+
 randomBtn.addEventListener('click', function () {
-    changeHP(playerFirst);
-    changeHP(playerSecond);
+    //changeHP(playerFirst);
+    //changeHP(playerSecond);
+
+    changeHP.call(playerFirst, getRandom(20));
+    changeHP.call(playerSecond, getRandom(20));
+
+    playerFirst.renderHp();
+    playerSecond.renderHp();
+
+
+
+    if(playerFirst.hp === 0 || playerSecond === 0) {
+        randomBtn.disabled = true;
+    }
+
+    if(playerFirst.hp === 0 && playerFirst.hp < playerSecond.hp) {
+        arena.append(playerWins(playerSecond.name));
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    } else if(playerSecond.hp === 0 && playerSecond.hp < playerFirst.hp) {
+        arena.append(playerWins(playerFirst.name));
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    } else if (playerFirst.hp === 0 && playerSecond.hp === 0) {
+        arena.append(playerWins());
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    }
 
 });
 
