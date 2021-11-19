@@ -9,10 +9,12 @@ const playerFirst = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['hand', 'leg','head'],
+    attack: function () {
+        console.log(`${this.name} fight`);
+    },
     elHp,
-    changeHP,
     renderHp,
-    attack
+    changeHP
 }
 
 
@@ -22,16 +24,18 @@ const playerSecond = {
     hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['hand', 'leg','head'],
+    attack: function () {
+        console.log(`${this.name} fight`);
+    },
     elHp,
-    changeHP,
     renderHp,
-    attack
+    changeHP
 }
 
 const HIT = {
     head: 30,
     body: 25,
-    foot: 20,
+    foot: 20
 }
 const ATTACK = ['head', 'body', 'foot'];
 
@@ -95,6 +99,11 @@ function createPlayer(obj) {
 //     playerLife.style.width = player.hp + '%';
 // }
 
+function getRandom(num) {
+    return Math.ceil(Math.random() * num);
+}
+
+
 function playerWins(name) {
     const loseTitle = createElement('div', 'loseTitle');
 
@@ -103,8 +112,6 @@ function playerWins(name) {
     } else {
         loseTitle.innerText = 'Draw';
     }
-
-
 
     return loseTitle;
 }
@@ -132,6 +139,7 @@ function createReloadButton() {
     });
 
 }
+
 
 function enemyAttack() {
     const hit = ATTACK[getRandom(3) - 1];
