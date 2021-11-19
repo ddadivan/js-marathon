@@ -1,6 +1,5 @@
 
 const arena = document.querySelector('.arenas');
-const controlArena = arena.querySelector('.control');
 const randomBtn = document.querySelector('.button');
 const form = document.querySelector('form.control');
 
@@ -126,7 +125,7 @@ function createReloadButton() {
     reloadBtn.classList.add('button');
     reloadBtn.textContent = 'Restart';
     wrapReloadBtn.append(reloadBtn);
-    controlArena.append(wrapReloadBtn);
+    arena.append(wrapReloadBtn);
 
     reloadBtn.addEventListener('click', function(e) {
         window.location.reload();
@@ -145,29 +144,36 @@ function enemyAttack() {
     }
 }
 
-randomBtn.addEventListener('click', function () {
-    changeHP(playerFirst);
-    changeHP(playerSecond);
-
-    if(playerFirst.hp === 0 || playerSecond === 0) {
-        randomBtn.disabled = true;
-    }
-
-    if(playerFirst.hp === 0 && playerFirst.hp < playerSecond.hp) {
-        arena.append(playerWins(playerSecond.name));
-        randomBtn.style = 'display: none;'
-        createReloadButton();
-    } else if(playerSecond.hp === 0 && playerSecond.hp < playerFirst.hp) {
-        arena.append(playerWins(playerFirst.name));
-        randomBtn.style = 'display: none;'
-        createReloadButton();
-    } else if (playerFirst.hp === 0 && playerSecond.hp === 0) {
-        arena.append(playerWins());
-        randomBtn.style = 'display: none;'
-        createReloadButton();
-    }
-
-});
+// randomBtn.addEventListener('click', function () {
+//     // changeHP(playerFirst);
+//     // changeHP(playerSecond);
+//
+//
+//     changeHP.call(playerFirst, getRandom(20));
+//     changeHP.call(playerSecond, getRandom(20));
+//
+//     playerFirst.renderHp();
+//     playerSecond.renderHp();
+//
+//     if(playerFirst.hp === 0 || playerSecond === 0) {
+//         randomBtn.disabled = true;
+//     }
+//
+//     if(playerFirst.hp === 0 && playerFirst.hp < playerSecond.hp) {
+//         arena.append(playerWins(playerSecond.name));
+//         randomBtn.style = 'display: none;'
+//         createReloadButton();
+//     } else if(playerSecond.hp === 0 && playerSecond.hp < playerFirst.hp) {
+//         arena.append(playerWins(playerFirst.name));
+//         randomBtn.style = 'display: none;'
+//         createReloadButton();
+//     } else if (playerFirst.hp === 0 && playerSecond.hp === 0) {
+//         arena.append(playerWins());
+//         randomBtn.style = 'display: none;'
+//         createReloadButton();
+//     }
+//
+// });
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -187,6 +193,30 @@ form.addEventListener('submit', function(e) {
         }
 
         item.checked = false;
+    }
+
+    changeHP.call(playerFirst, getRandom(20));
+    changeHP.call(playerSecond, getRandom(20));
+
+    playerFirst.renderHp();
+    playerSecond.renderHp();
+
+    if(playerFirst.hp === 0 || playerSecond === 0) {
+        randomBtn.disabled = true;
+    }
+
+    if(playerFirst.hp === 0 && playerFirst.hp < playerSecond.hp) {
+        arena.append(playerWins(playerSecond.name));
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    } else if(playerSecond.hp === 0 && playerSecond.hp < playerFirst.hp) {
+        arena.append(playerWins(playerFirst.name));
+        randomBtn.style = 'display: none;'
+        createReloadButton();
+    } else if (playerFirst.hp === 0 && playerSecond.hp === 0) {
+        arena.append(playerWins());
+        randomBtn.style = 'display: none;'
+        createReloadButton();
     }
 
 });
