@@ -54,17 +54,38 @@ function createPlayer(obj) {
     return elem;
 }
 
-function changeHP(player) {
-    const playerLife = document.querySelector('.player' + player.player + ' .life');
-    player.hp -= randomNum();
+// function changeHP(player) {
+//     const playerLife = document.querySelector('.player' + player.player + ' .life');
+//     player.hp -= randomNum();
+//
+//
+//     if(player.hp <= 0) {
+//        player.hp = 0;
+//     }
+//
+//     playerLife.style.width = player.hp + '%';
+// }
 
-
-    if(player.hp <= 0) {
-       player.hp = 0;
-    }
-
-    playerLife.style.width = player.hp + '%';
+function elHp() {
+    return document.querySelector('.player'+this.player+' .life');
 }
+
+function changeHP(randomNumber) {
+    this.hp -= randomNumber;
+
+    if(this.hp <= 0) {
+        this.hp = 0;
+    }
+}
+
+function renderHp() {
+    this.elHp().style.width = this.hp + '%';
+}
+
+function getRandom(num) {
+    return Math.ceil(Math.random() * num);
+}
+
 
 function playerWins(name) {
     const loseTitle = createElement('div', 'loseTitle');
@@ -74,8 +95,6 @@ function playerWins(name) {
     } else {
         loseTitle.innerText = 'Draw';
     }
-
-
 
     return loseTitle;
 }
@@ -101,8 +120,19 @@ function createReloadButton() {
 }
 
 randomBtn.addEventListener('click', function () {
-    changeHP(playerFirst);
-    changeHP(playerSecond);
+    //changeHP(playerFirst);
+    //changeHP(playerSecond);
+
+    changeHP.call(playerFirst, getRandom(20));
+    changeHP.call(playerSecond, getRandom(20));
+
+    elHp.call(playerFirst);
+    elHp.call(playerSecond);
+
+    renderHp.call(playerFirst);
+    renderHp.call(playerSecond);
+
+
 
     if(playerFirst.hp === 0 || playerSecond === 0) {
         randomBtn.disabled = true;
