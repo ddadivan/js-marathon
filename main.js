@@ -13,7 +13,8 @@ const playerFirst = {
         console.log(`${this.name} fight`);
     },
     elHp,
-    renderHp
+    renderHp,
+    changeHP
 }
 
 
@@ -27,7 +28,8 @@ const playerSecond = {
         console.log(`${this.name} fight`);
     },
     elHp,
-    renderHp
+    renderHp,
+    changeHP
 }
 
 function createElement(tag, className) {
