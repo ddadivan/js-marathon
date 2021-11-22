@@ -1,7 +1,7 @@
 
 const arena = document.querySelector('.arenas');
-const controlArena = arena.querySelector('.control');
 const randomBtn = document.querySelector('.button');
+const form = document.querySelector('form.control');
 
 const playerFirst = {
     name: 'Scorpion',
@@ -32,6 +32,13 @@ const playerSecond = {
     changeHP
 }
 
+const HIT = {
+    head: 30,
+    body: 25,
+    foot: 20
+}
+const ATTACK = ['head', 'body', 'foot'];
+
 function createElement(tag, className) {
     const $tag = document.createElement(tag);
 
@@ -40,6 +47,26 @@ function createElement(tag, className) {
     }
 
     return $tag;
+}
+
+function attack() {
+    console.log(this.name + ' ' + 'Fight');
+}
+
+function elHp() {
+    return document.querySelector('.player'+this.player+' .life');
+}
+
+function changeHP(randomNumber) {
+    this.hp -= randomNumber;
+
+    if(this.hp <= 0) {
+        this.hp = 0;
+    }
+}
+
+function renderHp() {
+    this.elHp().style.width = this.hp + '%';
 }
 
 
@@ -72,22 +99,6 @@ function createPlayer(obj) {
 //     playerLife.style.width = player.hp + '%';
 // }
 
-function elHp() {
-    return document.querySelector('.player'+this.player+' .life');
-}
-
-function changeHP(randomNumber) {
-    this.hp -= randomNumber;
-
-    if(this.hp <= 0) {
-        this.hp = 0;
-    }
-}
-
-function renderHp() {
-    this.elHp().style.width = this.hp + '%';
-}
-
 function getRandom(num) {
     return Math.ceil(Math.random() * num);
 }
@@ -110,6 +121,10 @@ function randomNum() {
     return randomNumber;
 }
 
+function getRandom(num) {
+    return Math.ceil(Math.random() * num);
+}
+
 function createReloadButton() {
     const wrapReloadBtn = document.createElement('div');
     wrapReloadBtn.classList.add('reloadWrap');
@@ -117,7 +132,7 @@ function createReloadButton() {
     reloadBtn.classList.add('button');
     reloadBtn.textContent = 'Restart';
     wrapReloadBtn.append(reloadBtn);
-    controlArena.append(wrapReloadBtn);
+    arena.append(wrapReloadBtn);
 
     reloadBtn.addEventListener('click', function(e) {
         window.location.reload();
@@ -125,17 +140,74 @@ function createReloadButton() {
 
 }
 
-randomBtn.addEventListener('click', function () {
-    //changeHP(playerFirst);
-    //changeHP(playerSecond);
+
+function enemyAttack() {
+    const hit = ATTACK[getRandom(3) - 1];
+    const defence = ATTACK[getRandom(3) - 1];
+
+    return {
+        value: getRandom(HIT[hit]),
+        hit,
+        defence
+    }
+}
+
+// randomBtn.addEventListener('click', function () {
+//     // changeHP(playerFirst);
+//     // changeHP(playerSecond);
+//
+//
+//     changeHP.call(playerFirst, getRandom(20));
+//     changeHP.call(playerSecond, getRandom(20));
+//
+//     playerFirst.renderHp();
+//     playerSecond.renderHp();
+//
+//     if(playerFirst.hp === 0 || playerSecond === 0) {
+//         randomBtn.disabled = true;
+//     }
+//
+//     if(playerFirst.hp === 0 && playerFirst.hp < playerSecond.hp) {
+//         arena.append(playerWins(playerSecond.name));
+//         randomBtn.style = 'display: none;'
+//         createReloadButton();
+//     } else if(playerSecond.hp === 0 && playerSecond.hp < playerFirst.hp) {
+//         arena.append(playerWins(playerFirst.name));
+//         randomBtn.style = 'display: none;'
+//         createReloadButton();
+//     } else if (playerFirst.hp === 0 && playerSecond.hp === 0) {
+//         arena.append(playerWins());
+//         randomBtn.style = 'display: none;'
+//         createReloadButton();
+//     }
+//
+// });
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const enemy = enemyAttack();
+
+    const attack = {};
+
+    for(let item of form) {
+        if(item.checked && item.name === 'hit') {
+            attack.value = getRandom(HIT[item.value]);
+            attack.hit = item.value;
+        }
+
+        if(item.checked && item.name === 'defence') {
+            attack.defence = item.value;
+        }
+
+        item.checked = false;
+    }
 
     changeHP.call(playerFirst, getRandom(20));
     changeHP.call(playerSecond, getRandom(20));
 
     playerFirst.renderHp();
     playerSecond.renderHp();
-
-
 
     if(playerFirst.hp === 0 || playerSecond === 0) {
         randomBtn.disabled = true;
