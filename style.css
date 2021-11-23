@@ -172,10 +172,19 @@ body {
 .chat {
     width: 786px;
     height: 30vh;
+    color: #fff;
+    padding: 0 40px;
+    font-size: 14px;
+    line-height: 1.4;
     background-image: url(./assets/versus.png);
     background-size: cover;
     background-position: center;
     border-top: 4px solid #f5d100;
+}
+
+.time {
+    font-size: 16px;
+    color: #ffc862;
 }
 
 .character {
