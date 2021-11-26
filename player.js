@@ -1,6 +1,20 @@
 import {attack, elHp, renderHp, changeHP} from "./changeHP.js";
 
-export const playerFirst = {
+class Player {
+    constructor(props) {
+        this.name = props.name;
+        this.player = props.player;
+        this.hp = props.hp;
+        this.img = props.img;
+        this.weapon = props.weapon;
+        this.attack = props.attack;
+        this.elHp = props.elHp;
+        this.renderHp = props.renderHp;
+        this.changeHP = props.changeHP;
+    }
+}
+
+export const playerFirst = new Player({
     name: 'Scorpion',
     player: 1,
     hp: 100,
@@ -12,9 +26,9 @@ export const playerFirst = {
     elHp,
     renderHp,
     changeHP
-}
+})
 
-export const playerSecond = {
+export const playerSecond = new Player({
     name: 'Kitana',
     player: 2,
     hp: 100,
@@ -26,4 +40,4 @@ export const playerSecond = {
     elHp,
     renderHp,
     changeHP
-}
+})
