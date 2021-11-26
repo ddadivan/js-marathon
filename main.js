@@ -1,8 +1,13 @@
+import Game from './game.js';
 import {playerFirst, playerSecond} from './player.js';
 import {showresult} from './results.js';
 import {generateLogs} from './logs.js';
 import getRandom from './random.js';
 import createPlayer from './createPlayer.js';
+
+const game = new Game();
+
+game.start();
 
 const arena = document.querySelector('.arenas');
 
@@ -45,7 +50,7 @@ function playerAttack() {
     return attack;
 }
 
-generateLogs('start', playerSecond, playerFirst);
+//generateLogs('start', playerSecond, playerFirst);
 
 form.addEventListener('submit', function(e) {
     e.preventDefault();
